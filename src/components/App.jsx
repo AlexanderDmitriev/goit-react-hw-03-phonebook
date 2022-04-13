@@ -6,7 +6,11 @@ import {Title, Container} from './App.styled';
 import {ContactList} from './ContactList/ContactList';
 import {Filter } from './Filter/ContactFilter';
 
+const CONTACTS_LOCAL_STORAGE="Phone book";
+
 export class App extends Component{
+  
+
   state = {
     contacts: 
       [
@@ -45,6 +49,18 @@ export class App extends Component{
 
   changeFilter = (event) => {
     this.setState({filter: event.currentTarget.value});
+};
+
+componentDidMount(){
+  const dataFromStorage=localStorage.getItem(CONTACTS_LOCAL_STORAGE);
+  const contactsFromStorage=JSON.parse(dataFromStorage);
+  this.setState({contacts:contactsFromStorage});
+};
+
+componentDidUpdate (_,prevState) {
+  if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem(CONTACTS_LOCAL_STORAGE, JSON.stringify(this.state.contacts));
+  }
 };
 
   render(){
